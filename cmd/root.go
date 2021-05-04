@@ -27,6 +27,7 @@ func init() {
 	rootCmd.AddCommand(getUserCommand)
 	rootCmd.AddCommand(migrateCmd)
 	rootCmd.AddCommand(checkCmd)
+	rootCmd.AddCommand(attachFieCmd)
 }
 
 func Execute()  {

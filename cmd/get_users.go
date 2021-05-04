@@ -5,18 +5,19 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"io/ioutil"
+	"os"
 	"time"
 
-	erp_clients "update-customer-image/erp-clients"
+	erpclients "update-customer-image/erp-clients"
 )
 
 var getUserCommand = &cobra.Command{
 	Use: "get-users",
 	Run: func(cmd *cobra.Command, args []string) {
-		customersData := make(map[string]erp_clients.CustomerData)
+		customersData := make(map[string]erpclients.CustomerData)
 
 		tasks := make(chan string, 100)
-		customers := make(chan erp_clients.CustomerData, 100)
+		customers := make(chan erpclients.CustomerData, 100)
 		defer close(tasks)
 		defer close(customers)
 
@@ -41,11 +42,11 @@ var getUserCommand = &cobra.Command{
 			}
 		}()
 
-		go func(tasks chan string, results chan erp_clients.CustomerData) {
+		go func(tasks chan string, results chan erpclients.CustomerData) {
 			for customerName := range tasks {
 				customerData, err := erpClient.GetCustomerByName(customerName)
 				if err != nil {
-					results <- erp_clients.CustomerData{
+					results <- erpclients.CustomerData{
 						Error: err.Error(),
 					}
 					continue
@@ -65,7 +66,7 @@ var getUserCommand = &cobra.Command{
 					fmt.Printf("[DB] Get customer success but filter fail, customer = %+v\n", customerData)
 				}
 
-			case <-time.After(3 * time.Minute):
+			case <-time.After(1 * time.Minute):
 				b, _ := json.MarshalIndent(customersData, "", "  ")
 				err := ioutil.WriteFile("users.json", b, 0664)
 				if err != nil {
@@ -73,6 +74,7 @@ var getUserCommand = &cobra.Command{
 				}
 
 				fmt.Println("get customers success")
+				os.Exit(0)
 			}
 		}
 	},
