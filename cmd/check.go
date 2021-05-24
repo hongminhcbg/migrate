@@ -36,7 +36,7 @@ var checkCmd = &cobra.Command{
 	Use: "check",
 	Run: func(cmd *cobra.Command, args []string) {
 		users := make(map[string]erp_clients.CustomerData)
-		b, err := ioutil.ReadFile("./users.json")
+		b, err := ioutil.ReadFile("./users.json.bak")
 		if err != nil {
 			panic(err)
 		}

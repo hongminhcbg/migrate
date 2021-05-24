@@ -41,7 +41,7 @@ var attachFieCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("[DB] This is attach file command")
 		users := make(map[string]erp_clients.CustomerData)
-		b, err := ioutil.ReadFile("./users.json")
+		b, err := ioutil.ReadFile("./users.json.bak")
 		if err != nil {
 			panic(err)
 		}

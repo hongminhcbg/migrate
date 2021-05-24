@@ -68,7 +68,7 @@ var getUserCommand = &cobra.Command{
 
 			case <-time.After(1 * time.Minute):
 				b, _ := json.MarshalIndent(customersData, "", "  ")
-				err := ioutil.WriteFile("users.json", b, 0664)
+				err := ioutil.WriteFile("users.json.bak", b, 0664)
 				if err != nil {
 					panic(err)
 				}
